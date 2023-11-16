@@ -81,9 +81,12 @@ def compute_pitch_moment_coefficient(
     forces_x = wall_pressure_forces[0] + wall_viscous_forces[0]
     forces_y = wall_pressure_forces[1] + wall_viscous_forces[1]
 
-    return sum(forces_y * x_lever + forces_x * y_lever) / (
-        0.5 * reference_density * reference_velocity**2
-    )
+    moments = []
+    for i in range(len(forces_x)):
+        m = np.cross([x_lever[i], y_lever[i]], [forces_x[i], forces_y[i]])
+        moments.append(m)
+
+    return sum(moments) / (0.5 * reference_density * reference_velocity**2)
 
 
 def compute_skin_friction_coefficient(
